@@ -1,0 +1,31 @@
+- name: enable sat repositories. 
+  command: "subscription-manager repos --enable {{ item }}"
+  with_items:
+  - rhel-server-rhscl-7-rpms
+  - rhel-7-server-satellite-6.2-rpms
+  
+
+- name: Install satellite
+  yum: name=satellite state=latest
+
+- name: install Chrony
+  yum: name=chrony state=latest
+
+- name: make sure Chrony is running
+  service: name=chronyd state=started enabled=yes
+
+- name: configure Satellite
+  command: >
+    satellite-installer --scenario satellite \
+    --foreman-initial-organization "kri.st" \
+    --foreman-initial-location "lab" \
+    --foreman-admin-username admin \
+    --foreman-admin-password password
+  creates: /var/log/foreman-installer/satellite.log
+
+- name: Update MOTD
+  blockinfile: block="Satellite prepared"
+               insertafter=EOF
+               marker="==============================================================="
+               dest=/etc/motd
+
