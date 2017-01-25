@@ -1,0 +1,19 @@
+- name: Enable Repositories
+  command: "subscription-manager repos --enable {{ item }}"
+  with_items:
+  - rh-gluster-3-for-rhel-7-server-rpms
+
+
+- name: install Gluster 
+  yum: name=redhat-storage-server* state=latest
+
+
+- name: Update MOTD
+  blockinfile: block="Gluster installed"
+               insertafter=EOF
+               marker="==============================================================="
+               dest=/etc/motd
+
+
+- name: Start gluster deamon
+  service: name=glusterd enabled=yes state=started

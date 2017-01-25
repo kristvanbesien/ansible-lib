@@ -16,12 +16,16 @@
 
 - name: configure Satellite
   command: >
-    satellite-installer --scenario satellite \
-    --foreman-initial-organization "kri.st" \
-    --foreman-initial-location "lab" \
-    --foreman-admin-username admin \
+    satellite-installer --scenario satellite 
+    --foreman-initial-organization "kri.st" 
+    --foreman-initial-location "lab" 
+    --foreman-admin-username admin 
     --foreman-admin-password password
-  creates: /var/log/foreman-installer/satellite.log
+    --certs-country BE
+    --certs-state Bern
+    --certs-city Bern
+    --certs-org  kri.st
+    --certs-org-unit lab
 
 - name: Update MOTD
   blockinfile: block="Satellite prepared"
