@@ -4,6 +4,9 @@
   - rhel-server-rhscl-7-rpms
   - rhel-7-server-satellite-6.2-rpms
   
+- name: Do LVM if data disk exists
+  include: lvm.yml
+  when: config_lvm 
 
 - name: Install satellite
   yum: name=satellite state=latest
