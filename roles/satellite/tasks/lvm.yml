@@ -1,35 +1,23 @@
+- name: Print what we are doing
+  debug:
+    msg: "Setting up volume for {{ dir }} on {{ sat_dev }}"
+
 - name: installing lvm2
   yum: name=lvm2 state=present
 
-- name: creating new LVM volume group
-  lvg: vg=data pvs={{ sat_datadev }} state=present
+- name: creating volume group
+  lvg: vg=data pvs={{ sat_dev }} state=present
 
 - name: creating new LVM logical volume
-  lvol: vg=data lv={{ item.lv }} size={{ item.size }} 
-  with_items:
-  - { lv: mongodb, size: 25g }
-  - { lv: cache, size: 10g }
-  - { lv: pulp, size: "100%FREE" }
+  lvol: vg=data lv={{ lv }} size={{ size }} 
 
 
-- name: creating new filesystem on new LVM logical volume for mongodb
-  filesystem: fstype=xfs dev=/dev/data/{{ item }}
-  with_items:
-  -  mongodb
-  -  cache
-  -  pulp
+- name: creating new filesystem on new LVM logical volume 
+  filesystem: fstype=xfs dev=/dev/data/{{ lv }}
 
-- name: create directory for mongodb
-  file: name={{ item }} state=directory
-  with_items:
-  - /var/lib/mongodb
-  - /var/cache/pulp
-  - /var/lib/pulp
+- name: create directory
+  file: name={{ dir }} state=directory
 
-- name: mounting mongodb filesystem
-  mount: name={{ item.mp }}  src=/dev/data/{{ item.lv }} fstype=xfs state=mounted
-  with_items:
-  - { lv: mongodb, mp: /var/lib/mongodb }
-  - { lv: cache, mp: /var/cache/pulp }
-  - { lv: pulp, mp: /var/lib/pulp }
+- name: mounting  filesystem
+  mount: name={{ dir }}  src=/dev/data/{{ lv }} fstype=xfs state=mounted
 

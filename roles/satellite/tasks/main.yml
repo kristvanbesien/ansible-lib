@@ -5,7 +5,11 @@
   - rhel-7-server-satellite-6.2-rpms
   
 - name: Do LVM if data disk exists
-  include: lvm.yml
+  include: lvm.yml lv={{ item.lv}} size={{ item.size }} dir={{ item.dir }} sat_dev={{ sat_datadev }}
+  with_items:
+  - { lv: mongodb, size: '25g', dir: "/var/lib/mongodb" }
+  - { lv: cache, size: '10g', dir: "/var/cache/pulp" }
+  - { lv: pulp, size: '100%FREE', dir: "/var/lib/pulp" }
   when: config_lvm 
 
 - name: Install satellite
@@ -17,21 +21,8 @@
 - name: make sure Chrony is running
   service: name=chronyd state=started enabled=yes
 
-- name: configure Satellite
-  command: >
-    satellite-installer --scenario satellite 
-    --foreman-initial-organization "kri.st" 
-    --foreman-initial-location "lab" 
-    --foreman-admin-username admin 
-    --foreman-admin-password password
-    --certs-country BE
-    --certs-state Bern
-    --certs-city Bern
-    --certs-org  kri.st
-    --certs-org-unit lab
-
 - name: Update MOTD
-  blockinfile: block="Satellite prepared"
+  blockinfile: block="Satellite prepared. You can now run satellite-installer"
                insertafter=EOF
                marker="==============================================================="
                dest=/etc/motd
