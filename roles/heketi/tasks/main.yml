@@ -1,0 +1,16 @@
+- name: Enable Repositories
+  command: "subscription-manager repos --enable {{ item }}"
+  with_items:
+  - rh-gluster-3-for-rhel-7-server-rpms
+
+
+- name: install Heketi 
+  yum: name=heketi state=latest
+
+
+- name: Update MOTD
+  blockinfile: block="Heketi installed"
+               insertafter=EOF
+               marker="==============================================================="
+               dest=/etc/motd
+

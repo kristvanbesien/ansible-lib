@@ -1,16 +1,20 @@
-- name: enable sat repositories. 
+- name: enable sat repositories.
   command: "subscription-manager repos --enable {{ item }}"
   with_items:
   - rhel-server-rhscl-7-rpms
   - rhel-7-server-satellite-6.2-rpms
-  
+
+- name: add extra packages
+  yum: name={{ item }} state=latest
+  with_items: "{{ satellite_extra_packages }}"
+
 - name: Do LVM if data disk exists
   include: lvm.yml lv={{ item.lv}} size={{ item.size }} dir={{ item.dir }} sat_dev={{ sat_datadev }}
   with_items:
   - { lv: mongodb, size: '25g', dir: "/var/lib/mongodb" }
   - { lv: cache, size: '10g', dir: "/var/cache/pulp" }
   - { lv: pulp, size: '100%FREE', dir: "/var/lib/pulp" }
-  when: config_lvm 
+  when: config_lvm
 
 - name: Install satellite
   yum: name=satellite state=latest
@@ -27,3 +31,22 @@
                marker="==============================================================="
                dest=/etc/motd
 
+- name: run satellite-installer
+  shell: |-
+      satellite-installer --scenario satellite{{ ' ' }}
+      {%- for key, value in satellite_install_options.iteritems() -%}
+        --{{ key }}
+          {%- if value -%}
+            {{ ' ' }}{{ value | quote }}{{ ' ' }}
+          {%- else -%}
+            {{ ' ' }}
+          {%- endif -%}
+      {%-  endfor %}
+
+- name: configure hammer
+  template:
+    src: cli_config.j2
+    dest: /home/vagrant/.hammer/cli_config.yml
+    owner: vagrant
+    group: vagrant
+    mode: 0644

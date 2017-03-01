@@ -11,13 +11,15 @@
     autosubscribe: false
   when: registered.stat.exists == false
 
+- name: Disable Repositories we don't need.
+  command: "subscription-manager repos --disable '*' "
+
 - name: Enable Repositories
   command: "subscription-manager repos --enable {{ item }}"
   with_items:
   - rhel-7-server-rpms
   - rhel-7-server-extras-rpms
   - rhel-7-server-rh-common-rpms
-  when: registered.stat.exists == false
 
 
 - name: upgrade all packages

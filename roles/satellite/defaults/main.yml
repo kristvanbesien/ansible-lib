@@ -1,0 +1,29 @@
+---
+config_lvm: false
+satellite_install_options:
+  enable-foreman-plugin-discovery:
+  certs-city: "Bern"
+  certs-state: "BE"
+  certs-country: "CH"
+  certs-org: "kri.st"
+  certs-org-unit: "lab"
+  foreman-admin-password: "password"
+  foreman-initial-location: "lab"
+  foreman-initial-organization: "kri.st"
+  foreman-proxy-dhcp: "true"
+  foreman-proxy-dhcp-gateway: "192.168.2.1"
+  foreman-proxy-dhcp-interface: "eth1"
+  foreman-proxy-dhcp-nameservers: "192.168.2.1"
+  foreman-proxy-dhcp-option-domain: "kri.st"
+  foreman-proxy-dhcp-range: "192.168.2.100 192.168.2.150"
+  foreman-proxy-dhcp-server: "127.0.0.1"
+  foreman-proxy-dns: "true"
+  foreman-proxy-dns-forwarders: "192.168.121.1"
+  foreman-proxy-dns-interface: "eth1"
+  foreman-proxy-dns-reverse: "2.168.192.in-addr.arpa"
+  foreman-proxy-dns-server: "127.0.0.1"
+  foreman-proxy-dns-zone : "lab.kri.st"
+  foreman-proxy-tftp: "true"
+satellite_extra_packages:
+  - "foreman-discovery-image"
+  - "rubygem-smart_proxy_discovery"
