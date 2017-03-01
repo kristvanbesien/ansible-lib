@@ -1,4 +1,4 @@
 :foreman:
-  :host: 'https://{{ fqdn }}/'
+  :host: 'https://{{ ansible_nodename }}/'
   :username: 'admin'
-  :password: {{ satellite_install_options.foreman-admin-password }} 
+  :password: {{ satellite_install_options["foreman-admin-password"] }}

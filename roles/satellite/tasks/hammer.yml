@@ -1,0 +1,16 @@
+- name: Make sure .hammer dir exists.
+  file: name="/home/vagrant/.hammer/" state=directory owner=vagrant group=vagrant
+
+- name: configure hammer
+  template:
+    src: cli_config.j2
+    dest: /home/vagrant/.hammer/cli_config.yml
+    owner: vagrant
+    group: vagrant
+    mode: 0644
+
+- name: Update MOTD
+  blockinfile: block="Hammer Configured."
+               insertafter=EOF
+               marker="==============================================================="
+               dest=/etc/motd

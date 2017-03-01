@@ -1,23 +1,18 @@
 - name: Print what we are doing
   debug:
-    msg: "Setting up volume for {{ dir }} on {{ sat_dev }}"
+    msg: "Setting up volume {{ lv }} for {{ dir }} on {{ sat_dev }}"
 
-- name: installing lvm2
-  yum: name=lvm2 state=present
+- name: Check if the volume doesn't exist already
+  stat:
+    path: /dev/data/{{ lv }}
+    follow: true
+  register: volume_status
 
-- name: creating volume group
-  lvg: vg=data pvs={{ sat_dev }} state=present
-
-- name: creating new LVM logical volume
-  lvol: vg=data lv={{ lv }} size={{ size }} 
-
-
-- name: creating new filesystem on new LVM logical volume 
-  filesystem: fstype=xfs dev=/dev/data/{{ lv }}
-
-- name: create directory
-  file: name={{ dir }} state=directory
-
-- name: mounting  filesystem
-  mount: name={{ dir }}  src=/dev/data/{{ lv }} fstype=xfs state=mounted
-
+- block:
+  - yum: name=lvm2 state=present
+  - lvg: vg=data pvs={{ sat_dev }} state=present
+  - lvol: vg=data lv={{ lv }} size={{ size }}
+  - filesystem: fstype=xfs dev=/dev/data/{{ lv }}
+  - file: name={{ dir }} state=directory
+  - mount: name={{ dir }}  src=/dev/data/{{ lv }} fstype=xfs state=mounted
+  when: not volume_status.stat.isblk
