@@ -7,10 +7,9 @@
   with_items:
     - libvirt
     - libvirt-devel
-    - qemu-kvm 
+    - qemu-kvm
     - qemu-img
     - qemu-kvm-tools
-    - virt-manager
 
 - name: enable and start libvirtd
   service: name=libvirtd enabled=yes state=started
