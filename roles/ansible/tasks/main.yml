@@ -1,0 +1,11 @@
+- name: Enable EPEL
+  yum:
+    name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    state: present
+
+- name: install Ansible
+  yum:
+    name: ansible
+    state: latest
+
+# Todo add config (vaultpassword etc...)
