@@ -1,0 +1,16 @@
+- name: Install Ansible
+  yum:
+    name: https://releases.hashicorp.com/vagrant/1.9.2/vagrant_1.9.2_x86_64.rpm
+    state: present
+- name: Install Ansible plugins
+  shell: "vagrant plugin install {{ item }}"
+  with_items:
+  - vagrant-libvirt
+  - vagrant-hostmanager
+
+
+- name: Update MOTD
+  blockinfile: block="Vagrant, vagrant-libvirt, vagrant-hostmanager installed"
+                insertafter=EOF
+                marker="==============================================================="
+                dest=/etc/motd
