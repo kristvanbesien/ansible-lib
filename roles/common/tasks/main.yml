@@ -18,6 +18,27 @@
 
 - name: Set authorized key for remote user copying it from current user
   authorized_key:
-    user: "{{ ansible_user_id }}"
+    user: "{{ ansible_env.SUDO_USER }}"
     state: present
     key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
+
+- name: Install packages
+  yum:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - "@Development Tools"
+    - git
+    - screen
+    - mc
+
+- name: Set password less admin privileges in policykit
+  copy:
+    src: 49-nopasswd_global.rules
+    dest: /etc/polkit-1/rules.d/
+
+- name: Set password less sudo for remote user
+  template:
+    src: adminuser.j2
+    dest: /etc/sudoers.d/adminuser
