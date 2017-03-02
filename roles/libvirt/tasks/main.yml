@@ -8,6 +8,10 @@
     - libvirt
     - libvirt-devel
 
+- name: enable and start libvirtd
+  service: name=libvirtd enabled=yes state=started
+
+
 - name: Update MOTD
   blockinfile: block="Libvirt Installed"
                insertafter=EOF
