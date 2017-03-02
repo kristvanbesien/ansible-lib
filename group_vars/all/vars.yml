@@ -1,3 +1,3 @@
 rh_username: kvanbesi@redhat.com
 rh_password: "{{ vault_rh_password }}"
-rh_pool: "8a85f981568e999d01568ed222cd6712"
+rh_pool: "Employee SKU"
