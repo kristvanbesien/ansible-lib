@@ -8,6 +8,11 @@
   - vagrant-libvirt
   - vagrant-hostmanager
 
+- name: Enable NFS
+  service: name=nfs enabled=yes state=started
+
+# TODO: May need to add firewall config here.
+# See https://42notes.wordpress.com/2015/04/30/notes-on-nfs-firewalld-selinux/
 
 - name: Update MOTD
   blockinfile: block="Vagrant, vagrant-libvirt, vagrant-hostmanager installed"
