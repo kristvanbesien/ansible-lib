@@ -22,17 +22,6 @@
     state: present
     key: "{{ lookup('file', lookup('env','HOME') + '/.ssh/id_rsa.pub') }}"
 
-- name: Install packages
-  yum:
-    name: "{{ item }}"
-    state: present
-    update_cache: yes
-  with_items:
-    - "@Development Tools"
-    - git
-    - screen
-    - mc
-
 - name: Set password less admin privileges in policykit
   copy:
     src: 49-nopasswd_global.rules

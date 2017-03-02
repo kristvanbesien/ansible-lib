@@ -21,6 +21,17 @@
 - name: upgrade all packages
   yum: name=* state=latest
 
+- name: Install packages
+  yum:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - "@Development Tools"
+    - git
+    - screen
+    - mc
+
 - name: Update MOTD
   blockinfile: block="Registered with Red Hat CDN"
                insertafter=EOF
