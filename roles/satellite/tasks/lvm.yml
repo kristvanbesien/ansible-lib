@@ -15,4 +15,4 @@
   - filesystem: fstype=xfs dev=/dev/data/{{ lv }}
   - file: name={{ dir }} state=directory
   - mount: name={{ dir }}  src=/dev/data/{{ lv }} fstype=xfs state=mounted
-  when: not volume_status.stat.isblk
+  when: not volume_status.stat.exists
