@@ -25,6 +25,7 @@ satellite_install_options:
   foreman-proxy-dns-server: "127.0.0.1"
   foreman-proxy-dns-zone : "lab.kri.st"
   foreman-proxy-tftp: "true"
+  katello-enable-ostree: "true"
 satellite_extra_packages:
   - "foreman-discovery-image"
   - "rubygem-smart_proxy_discovery"
