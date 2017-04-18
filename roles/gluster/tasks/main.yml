@@ -1,9 +1,3 @@
-- name: Enable Repositories
-  command: "subscription-manager repos --enable {{ item }}"
-  with_items:
-  - rh-gluster-3-for-rhel-7-server-rpms
-
-
 - name: install Gluster 
   yum: name=redhat-storage-server* state=latest
 
